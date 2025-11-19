@@ -62,3 +62,23 @@ export interface TradeHistory {
   totalLoss: number;
   winRate: number;
 }
+
+export interface TradeInput {
+  symbol: string;
+  side: OrderSide;
+  quantity: number;
+  price: number;
+  type?: OrderType;
+}
+
+export interface Transaction {
+  id: string;
+  type: 'BUY' | 'SELL' | 'DEPOSIT' | 'WITHDRAWAL';
+  symbol?: string;
+  quantity?: number;
+  price?: number;
+  amount: number;
+  balance: number;
+  timestamp: Date;
+  description: string;
+}
