@@ -1,126 +1,91 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Layout from './components/layout/Layout';
 import { initializePrices } from './utils/initializePrices';
-import { usePortfolioValue } from './hooks/usePortfolioValue';
 import { useUserStore } from './stores/userStore';
+import PortfolioSummary from './components/dashboard/PortfolioSummary';
+import QuickStats from './components/dashboard/QuickStats';
+import PositionsList from './components/dashboard/PositionsList';
 
 function App() {
-  const { value, gainLoss, gainLossPercent, cash, positionCount } = usePortfolioValue();
   const { username, level, xp } = useUserStore();
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Initialize prices on mount
+  // Initialize prices and mock data on mount
   useEffect(() => {
     initializePrices();
+
+    // Initialize mock portfolio for demo (comment out if you want to start fresh)
+    // Uncomment the line below to start with sample positions
+    // initializeMockPortfolio();
+
+    setIsLoading(false);
   }, []);
 
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-    }).format(amount);
-  };
-
-  const formatPercent = (percent: number) => {
-    return `${percent >= 0 ? '+' : ''}${percent.toFixed(2)}%`;
-  };
+  if (isLoading) {
+    return (
+      <Layout>
+        <div className="max-w-7xl mx-auto">
+          <div className="flex items-center justify-center min-h-screen">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto mb-4"></div>
+              <p className="text-gray-600">Loading your portfolio...</p>
+            </div>
+          </div>
+        </div>
+      </Layout>
+    );
+  }
 
   return (
     <Layout>
-      <div className="max-w-7xl mx-auto">
-        {/* Portfolio Overview */}
-        <div className="mb-6">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">
-            Welcome back, {username}!
-          </h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div className="card">
-              <p className="text-sm text-gray-500 mb-1">Total Value</p>
-              <p className="text-2xl font-bold text-gray-900">{formatCurrency(value)}</p>
-            </div>
-
-            <div className="card">
-              <p className="text-sm text-gray-500 mb-1">Gain/Loss</p>
-              <p
-                className={`text-2xl font-bold ${
-                  gainLoss >= 0 ? 'text-green-600' : 'text-red-600'
-                }`}
-              >
-                {formatCurrency(gainLoss)} ({formatPercent(gainLossPercent)})
-              </p>
-            </div>
-
-            <div className="card">
-              <p className="text-sm text-gray-500 mb-1">Cash</p>
-              <p className="text-2xl font-bold text-gray-900">{formatCurrency(cash)}</p>
-            </div>
-
-            <div className="card">
-              <p className="text-sm text-gray-500 mb-1">Positions</p>
-              <p className="text-2xl font-bold text-gray-900">{positionCount}</p>
-            </div>
+      <div className="max-w-7xl mx-auto space-y-6">
+        {/* Header with User Info */}
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">
+              Welcome back, {username}!
+            </h1>
+            <p className="text-gray-500 mt-1">Track your portfolio and make smart trades</p>
           </div>
-        </div>
 
-        {/* User Info */}
-        <div className="card mb-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-500">Level {level} Trader</p>
-              <div className="mt-2 w-64 bg-gray-200 rounded-full h-2">
+          {/* User Level Badge */}
+          <div className="hidden md:block">
+            <div className="bg-white rounded-lg shadow-md p-4 min-w-[200px]">
+              <div className="flex items-center justify-between mb-2">
+                <p className="text-sm text-gray-500">Level {level} Trader</p>
+                <span className="text-xs font-medium text-primary-600">
+                  {xp} / {level * 1000} XP
+                </span>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-2">
                 <div
-                  className="bg-primary-600 h-2 rounded-full"
+                  className="bg-primary-600 h-2 rounded-full transition-all duration-300"
                   style={{ width: `${(xp / (level * 1000)) * 100}%` }}
                 />
               </div>
-              <p className="text-xs text-gray-500 mt-1">
-                {xp} / {level * 1000} XP
-              </p>
             </div>
           </div>
         </div>
 
-        {/* Feature Cards */}
-        <div className="card">
-          <div className="text-center">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">Trading Game</h1>
-            <p className="text-lg text-gray-600 mb-6">
-              Your journey to mastering trading starts here
-            </p>
+        {/* Portfolio Summary */}
+        <PortfolioSummary />
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
-              <div className="p-6 bg-primary-50 rounded-lg border border-primary-200">
-                <h3 className="text-xl font-semibold text-primary-900 mb-2">
-                  Learn to Trade
-                </h3>
-                <p className="text-primary-700">
-                  Practice trading strategies without risking real money
-                </p>
-              </div>
+        {/* Quick Stats */}
+        <QuickStats />
 
-              <div className="p-6 bg-green-50 rounded-lg border border-green-200">
-                <h3 className="text-xl font-semibold text-green-900 mb-2">
-                  Track Performance
-                </h3>
-                <p className="text-green-700">
-                  Monitor your portfolio and analyze your trading decisions
-                </p>
-              </div>
+        {/* Positions List */}
+        <PositionsList />
 
-              <div className="p-6 bg-purple-50 rounded-lg border border-purple-200">
-                <h3 className="text-xl font-semibold text-purple-900 mb-2">
-                  Build Skills
-                </h3>
-                <p className="text-purple-700">
-                  Improve your trading skills through realistic simulations
-                </p>
-              </div>
-            </div>
-
-            <div className="mt-8">
-              <button className="btn-primary">Start Trading</button>
-            </div>
-          </div>
+        {/* Help Text */}
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <p className="text-sm text-blue-800">
+            <strong>Tip:</strong> Open your browser console and try:{' '}
+            <code className="bg-blue-100 px-2 py-1 rounded">
+              import {'{'} initializeMockPortfolio {'}'} from './utils/mockData';
+              initializeMockPortfolio();
+            </code>
+            {' '}to add sample positions for testing.
+          </p>
         </div>
       </div>
     </Layout>
