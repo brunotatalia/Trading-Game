@@ -1,31 +1,31 @@
 import React, { useEffect } from 'react';
 import { OrderForm } from '../components/trading/OrderForm';
-import { useStockDataStore } from '../stores/stockDataStore';
+import { MarketStatusBadge } from '../components/common/MarketStatusBadge';
 import { usePortfolioStore } from '../stores/portfolioStore';
 
 export const Trading: React.FC = () => {
-  const updatePrices = useStockDataStore((state) => state.updatePrices);
   const updatePositionPrices = usePortfolioStore(
     (state) => state.updatePositionPrices
   );
 
-  // עדכון מחירים כל 5 שניות
+  // עדכון מחירי הפוזיציות כל שנייה
   useEffect(() => {
     const interval = setInterval(() => {
-      updatePrices();
       updatePositionPrices();
-    }, 5000);
+    }, 1000);
 
     return () => clearInterval(interval);
-  }, [updatePrices, updatePositionPrices]);
+  }, [updatePositionPrices]);
 
   return (
     <div className="max-w-2xl mx-auto">
+      <div className="mb-6">
+        <MarketStatusBadge />
+      </div>
+
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">מסחר במניות</h1>
-        <p className="text-gray-600">
-          קנה ומכור מניות בזמן אמת
-        </p>
+        <p className="text-gray-600">קנה ומכור מניות בזמן אמת</p>
       </div>
 
       <OrderForm />
@@ -37,6 +37,7 @@ export const Trading: React.FC = () => {
           <li>עמלת מסחר היא 0.1% מסכום העסקה</li>
           <li>Market Order מבוצע במחיר השוק הנוכחי</li>
           <li>Limit Order מאפשר לך לקבוע מחיר רצוי</li>
+          <li>המחירים מתעדכנים בזמן אמת עם מודל GBM</li>
         </ul>
       </div>
     </div>

@@ -1,13 +1,26 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
 import { useStockDataStore } from '../stores/stockDataStore';
 import { usePortfolioStore } from '../stores/portfolioStore';
+import { MarketStatusBadge } from '../components/common/MarketStatusBadge';
 import { Button } from '../components/common/Button';
 
 export const Dashboard: React.FC = () => {
   const stocks = useStockDataStore((state) => state.stocks);
   const { cash, totalValue, positions } = usePortfolioStore();
+  const updatePositionPrices = usePortfolioStore(
+    (state) => state.updatePositionPrices
+  );
+
+  // עדכון מחירים בזמן אמת
+  useEffect(() => {
+    const interval = setInterval(() => {
+      updatePositionPrices();
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [updatePositionPrices]);
 
   const topGainers = [...stocks]
     .sort((a, b) => b.changePercent - a.changePercent)
@@ -19,12 +32,16 @@ export const Dashboard: React.FC = () => {
 
   return (
     <div className="max-w-6xl mx-auto">
+      <div className="mb-6">
+        <MarketStatusBadge />
+      </div>
+
       <div className="mb-8">
         <h1 className="text-4xl font-bold text-gray-900 mb-2">
           ברוכים הבאים למשחק המסחר! 📈
         </h1>
         <p className="text-xl text-gray-600">
-          התחל למסחר עם $100,000 וירטואליים
+          התחל למסחר עם $100,000 וירטואליים - מחירים בזמן אמת עם GBM
         </p>
       </div>
 

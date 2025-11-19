@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import clsx from 'clsx';
 import { usePortfolioStore } from '../stores/portfolioStore';
+import { MarketStatusBadge } from '../components/common/MarketStatusBadge';
 import { ArrowTrendingUpIcon, ArrowTrendingDownIcon } from '@heroicons/react/24/solid';
 
 export const Portfolio: React.FC = () => {
@@ -13,10 +14,27 @@ export const Portfolio: React.FC = () => {
     transactions,
   } = usePortfolioStore();
 
+  const updatePositionPrices = usePortfolioStore(
+    (state) => state.updatePositionPrices
+  );
+
+  // עדכון מחירים בזמן אמת
+  useEffect(() => {
+    const interval = setInterval(() => {
+      updatePositionPrices();
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [updatePositionPrices]);
+
   const isProfit = totalProfitLoss >= 0;
 
   return (
     <div className="max-w-6xl mx-auto">
+      <div className="mb-6">
+        <MarketStatusBadge />
+      </div>
+
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">התיק שלי</h1>
         <p className="text-gray-600">סקירה של ההשקעות והעסקאות שלך</p>
