@@ -15,6 +15,9 @@ export function Header() {
             <Link to="/trading" className="text-gray-600 hover:text-primary-600 font-medium">
               Trading
             </Link>
+            <Link to="/options" className="text-gray-600 hover:text-primary-600 font-medium">
+              Options
+            </Link>
           </nav>
         </div>
       </div>

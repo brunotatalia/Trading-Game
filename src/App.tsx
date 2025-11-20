@@ -4,6 +4,7 @@ import { usePriceStore } from './stores/priceStore';
 import { Header } from './components/layout/Header';
 import { Dashboard } from './pages/Dashboard';
 import { Trading } from './pages/Trading';
+import { Options } from './pages/Options';
 
 function App() {
   const startSimulation = usePriceStore(s => s.startSimulation);
@@ -24,6 +25,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/trading" element={<Trading />} />
+            <Route path="/options" element={<Options />} />
           </Routes>
         </main>
       </div>
