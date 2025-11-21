@@ -10,10 +10,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@headlessui/react": "^2.2.9",
+    "@heroicons/react": "^2.2.0",
     "date-fns": "^3.0.6",
+    "lightweight-charts": "^5.0.9",
     "lodash-es": "^4.17.21",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
+    "react-router-dom": "^7.9.6",
     "uuid": "^13.0.0",
     "zustand": "^4.4.7"
   },
