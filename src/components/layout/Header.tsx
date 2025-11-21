@@ -26,6 +26,18 @@ export function Header() {
               <Link to="/challenges" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">
                 Challenges
               </Link>
+              <Link to="/shop" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">
+                Shop
+              </Link>
+              <Link to="/achievements" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">
+                Achievements
+              </Link>
+              <Link to="/profile" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">
+                Profile
+              </Link>
+              <Link to="/history" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">
+                History
+              </Link>
             </nav>
             <button
               onClick={() => setIsDark(!isDark)}
