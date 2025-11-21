@@ -5,6 +5,7 @@ import { Header } from './components/layout/Header';
 import { Dashboard } from './pages/Dashboard';
 import { Trading } from './pages/Trading';
 import { Options } from './pages/Options';
+import { Challenges } from './pages/Challenges';
 
 function App() {
   const startSimulation = usePriceStore(s => s.startSimulation);
@@ -19,13 +20,14 @@ function App() {
 
   return (
     <BrowserRouter>
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen">
         <Header />
         <main className="max-w-7xl mx-auto px-4 py-6">
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/trading" element={<Trading />} />
             <Route path="/options" element={<Options />} />
+            <Route path="/challenges" element={<Challenges />} />
           </Routes>
         </main>
       </div>
